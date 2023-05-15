@@ -12,22 +12,20 @@
 echo "hipMemcpyHtoD"
 input=$1
 addresses=( $(awk '/"Name":"hipMemcpyHtoD"/ {getline ; print $3}' input.json | sed 's/src(0x//g' | sed 's/)//g') )
-cp input.json prova.json
 for i in "${addresses[@]}" ; do
 	var_name=$(grep -B 6 -m 1 $i $input | awk '/Simple transfer/ {print $5}' | sed "s/'//g")
 	echo "$var_name with addr $i occurs $(grep -c $i prova.json) times"
-        sed -i '/'$i'/{n;s/"Data":"",/"Data":"'$var_name'",/}' prova.json
+        sed -i '/'$i'/{n;s/"Data":"",/"Data":"'$var_name'",/}' input.json
 	j=$(($j+1))
 	echo "$j is $var_name ... done "
 done
 echo "hipMemcpyDtoH"
 input=$1
 addresses=( $(awk '/"Name":"hipMemcpyDtoH"/ {getline ; print $3}' input.json | sed 's/src(0x//g' | sed 's/)//g') )
-cp input.json prova.json
 for i in "${addresses[@]}" ; do
         var_name=$(grep -B 6 -m 1 $i $input | awk '/Simple transfer/ {print $5}' | sed "s/'//g")
         echo "$var_name with addr $i occurs $(grep -c $i prova.json) times"
-        sed -i '/'$i'/{n;s/"Data":"",/"Data":"'$var_name'",/}' prova.json
+        sed -i '/'$i'/{n;s/"Data":"",/"Data":"'$var_name'",/}' input.json
         j=$(($j+1))
         echo "$j is $var_name ... done "
 done
