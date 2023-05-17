@@ -36,7 +36,6 @@ for j in $(seq 0 $lens) ; do
 		if [[ $counts -gt 0 ]] ; then
 			#find the name of the variable from debugger output
 			var_name=$( grep -B 16 "host ${addresses_s[$j]} to acc ${addresses_d[$i]}" $input | grep "Simple transfer of" | tail -n 1 | awk '{print $5}' | sed "s/'//g")
-			counts=$( grep -c "dst(0x${addresses_d[$i]}) src(0x${addresses_s[$j]})" input.mod.json )
 			echo "$var_name with addr dst(0x${addresses_d[$i]}), src(0x${addresses_s[$j]}) occurs $counts times"
 	        	#put the name of the variable in Data
 			sed -i '/dst(0x'${addresses_d[$i]}') src(0x'${addresses_s[$j]}')/{n;s/"Data":"",/"Data":"'$var_name'",/}' input.mod.json
@@ -61,7 +60,6 @@ for j in $(seq 0 $lens) ; do
                 if [[ $counts -gt 0 ]] ; then
                         #find the name of the variable from debugger outp
                         var_name=$( grep -B 16 "acc ${addresses_s[$j]} to host ${addresses_d[$i]}" $input | grep "Simple transfer of" | tail -n 1 | awk '{print $5}' | sed "s/'//g")
-                        counts=$( grep -c "dst(0x${addresses_d[$i]}) src(0x${addresses_s[$j]})" input.mod.json )
                         echo "$var_name with addr dst(0x${addresses_d[$i]}), src(0x${addresses_s[$j]}) occurs $counts times"
                         #put the name of the variable in Data
                         sed -i '/dst(0x'${addresses_d[$i]}') src(0x'${addresses_s[$j]}')/{n;s/"Data":"",/"Data":"'$var_name'",/}' input.mod.json
